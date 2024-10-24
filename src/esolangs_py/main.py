@@ -3,7 +3,7 @@ import pathlib
 
 from sys import exit, stderr
 
-from esolangs_py.lang_list import IMPLEMENTED
+from lang_list import IMPLEMENTED
 
 
 def main(script: pathlib.Path, lang: str) -> int:
@@ -19,7 +19,7 @@ def main(script: pathlib.Path, lang: str) -> int:
 
     match lang:
         case "brainfuck":
-            from esolangs_py.lib.brainfuck import interpret
+            from lib.brainfuck import interpret
         case _:
             return -1
 
@@ -28,7 +28,7 @@ def main(script: pathlib.Path, lang: str) -> int:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="All-in-one esolang interpreter")
-    parser.add_argument("script", nargs=1, help="esolang script file")
+    parser.add_argument("script", help="esolang script file")
     parser.add_argument(
         "-l", "--lang", "--language",
         help="name of the esolang (not required if the esolang has a distinct extension)",
@@ -46,6 +46,6 @@ if __name__ == "__main__":
         extension = script_path.suffix.lower()
         language  = IMPLEMENTED.get(extension)
         if language is None:
-            raise NotImplemented(f"'{extension}' language not recognized or supported.")
+            raise NotImplementedError(f"'{extension}' language not recognized or supported.")
 
     exit(main(script_path, language))
