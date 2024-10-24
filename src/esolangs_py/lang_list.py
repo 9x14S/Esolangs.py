@@ -1,0 +1,3 @@
+IMPLEMENTED = {
+    ".bf": "brainfuck",
+}
