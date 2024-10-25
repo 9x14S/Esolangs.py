@@ -81,6 +81,7 @@ def output_byte():
     flushes.
     """
     stdout.buffer.write(ARRAY[DPTR].to_bytes(1, "little"))
+    stdout.flush()
 
 def input_byte():
     """Receives a single byte into the cell currently pointed at by DPTR.
@@ -97,11 +98,21 @@ def output_debug():
     """
     dptr_minus_5 = DPTR - 5
     dptr_plus_5  = DPTR + 5
-    start = dptr_minus_5 if dptr_minus_5 > 0 else DPTR - (5 - dptr_minus_5)
-    end   = dptr_plus_5  if dptr_plus_5 < BF_DEFAULT_MEMORY_SIZE else DPTR + 4 - (dptr_minus_5 % BF_DEFAULT_MEMORY_SIZE)
-    near_cells = [f"{val:x}" if idx + start != DPTR else f"{val:X}" for idx, val in enumerate(ARRAY[start:end])]
+
+    # TODO: FIXME: This.
+
+    if DPTR > BF_DEFAULT_MEMORY_SIZE // 2:
+        start = dptr_minus_5
+        end = dptr_plus_5 if dptr_plus_5 < BF_DEFAULT_MEMORY_SIZE else DPTR + 4 - (dptr_minus_5 % BF_DEFAULT_MEMORY_SIZE)
+    else:
+        start = dptr_minus_5 if dptr_minus_5 > 0 else 0 + (5 + (dptr_minus_5 - DPTR))
+        end = dptr_plus_5
+
+    # DEBUG
+    print(f"{start = }, {end = }", file=stderr)
+    near_cells = [f"0x{val:02x}" if idx + start != DPTR else f"> 0x{val:02X} <" for idx, val in enumerate(ARRAY[start:end])]
     print(
-        f"{IPTR = :5}, {DPTR = :5}",
+        f"{IPTR = :2}, {DPTR = :2}",
         f"{near_cells}",
         sep='\n',
         file=stderr,
