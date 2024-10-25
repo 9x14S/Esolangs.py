@@ -173,7 +173,7 @@ def parse_instructions(
     else:
         keep = None
 
-    filter_instructions(instructions, keep)
+    INSTRUCTIONS = ''.join(filter_instructions(instructions, keep))
 
 
 def run():
