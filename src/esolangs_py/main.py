@@ -20,13 +20,14 @@ def main(script: pathlib.Path, lang: str) -> int:
     match lang:
         case "brainfuck":
             from lib.brainfuck import interpret
+            return interpret(script_contents)
         case _:
             return -1
 
-    return interpret(script_contents)
 
 
 if __name__ == "__main__":
+    # TODO: implement subparsers for each language
     parser = argparse.ArgumentParser(description="All-in-one esolang interpreter")
     parser.add_argument("script", help="esolang script file")
     parser.add_argument(
